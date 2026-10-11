@@ -1,0 +1,70 @@
+# The name shown in the Actions tab
+name: CI
+
+# TRIGGERS: when does this workflow run?
+on:
+  pull_request: # every PR (opened, new commits pushed, reopened)
+  push:
+    branches: [main] # and every push to main (i.e. after a merge)
+
+# LEAST PRIVILEGE: the automatic GITHUB_TOKEN can only read the repo.
+# Without this, the default may allow writes. Jobs that need more ask for it explicitly.
+permissions:
+  contents: read
+
+# CONCURRENCY: if you push again to the same PR, cancel the now-outdated run.
+# On main we never cancel, so every merge gets a complete run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    name: ci # the check name you'll require in #6. Keep it stable!
+    runs-on: ubuntu-latest # a fresh Linux VM each time (free for public repos)
+    timeout-minutes: 15 # kill hung runs instead of burning 6 hours
+
+    steps:
+      # 1. Get the code (runners start empty)
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # 2. Install the .NET SDK, reading the exact version from global.json
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      # 3. Install pnpm, using the version from package.json "packageManager"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      # 4. Install Node and cache the pnpm store between runs (faster installs)
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # 5. Install the Node tooling exactly as locked.
+      #    --frozen-lockfile: fail if pnpm-lock.yaml is out of date (never silently changes it in CI)
+      #    --ignore-scripts:  skip "prepare" (no git hooks needed on a CI runner)
+      - name: Install Node tooling
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # 6. .NET restore → build → format check → test
+      - name: Restore
+        run: dotnet restore MealPlanner.slnx
+
+      - name: Build
+        run: dotnet build MealPlanner.slnx --no-restore --configuration Release
+
+      - name: Check C# formatting
+        run: dotnet format MealPlanner.slnx --verify-no-changes --no-restore
+
+      - name: Test
+        run: dotnet test MealPlanner.slnx --no-build --configuration Release
+
+      # 7. Prettier on ALL files (catches anything committed with LEFTHOOK=0)
+      - name: Check Prettier formatting
+        run: pnpm exec prettier --check .
