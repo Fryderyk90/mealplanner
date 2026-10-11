@@ -1,0 +1,52 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.rsuser
+.vs/
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Rider / VS Code
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Node / frontend
+node_modules/
+dist/
+.turbo/
+storybook-static/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.pnpm-store/
+
+# Environment and secrets: never commit these
+.env
+.env.*
+!.env.example
+*.pfx
+*.key
+appsettings.*.local.json
+secrets/
+
+# OpenTofu / Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl.bak
+crash.log
+
+# Kubernetes / Helm
+*.kubeconfig
+deploy/charts/**/charts/*.tgz
+
+# OS
+.DS_Store
+Thumbs.db
