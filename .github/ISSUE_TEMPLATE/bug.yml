@@ -16,7 +16,8 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
-      value: 1.
+      value: |
+        1.
         2.
         3.
     validations:
