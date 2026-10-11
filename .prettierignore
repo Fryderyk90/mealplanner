@@ -1,0 +1,23 @@
+# Build output
+bin/
+obj/
+dist/
+storybook-static/
+coverage/
+playwright-report/
+test-results/
+
+# Dependencies and lock files
+node_modules/
+pnpm-lock.yaml
+
+# Generated files
+CHANGELOG.md
+**/__generated__/
+**/*.generated.*
+src/Gateway/supergraph.graphql
+
+# Formatted by other tools (dotnet format, tofu fmt, helm)
+*.cs
+*.tf
+deploy/charts/**/templates/
