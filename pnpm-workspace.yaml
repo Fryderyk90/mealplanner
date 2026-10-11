@@ -1,0 +1,4 @@
+# Dependencies allowed to run install scripts (pnpm blocks them by default as a supply-chain measure).
+# lefthook is denied: the root package.json "prepare" script runs `lefthook install` instead.
+allowBuilds:
+  lefthook: false
