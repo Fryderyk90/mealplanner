@@ -29,19 +29,23 @@ Describe the decision in active voice ("We will…"), including any rules that f
 ## Pros and cons of the options
 
 ### Option A
+
 - 👍 …
 - 👎 …
 
 ### Option B
+
 - 👍 …
 - 👎 …
 
 ## Consequences
 
 **Positive**
+
 - …
 
 **Negative / accepted trade-offs**
+
 - …
 
 **Revisit if…** the conditions under which this decision should be reconsidered.

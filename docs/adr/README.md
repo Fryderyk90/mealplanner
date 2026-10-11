@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-An **ADR** records one significant decision: its context, the options that were considered, what was decided, and the consequences. Code shows *what* was built; ADRs explain *why*.
+An **ADR** records one significant decision: its context, the options that were considered, what was decided, and the consequences. Code shows _what_ was built; ADRs explain _why_.
 
 ## Rules
 
@@ -21,6 +21,6 @@ See [CONTRIBUTING.md](../../CONTRIBUTING.md#when-is-an-adr-required) for when an
 
 ## Index
 
-| ADR | Title | Status |
-|---|---|---|
+| ADR                               | Title                                                         | Status   |
+| --------------------------------- | ------------------------------------------------------------- | -------- |
 | [0001](0001-why-microservices.md) | Use a microservices architecture (deliberately, for learning) | Accepted |
