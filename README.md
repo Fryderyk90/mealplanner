@@ -76,7 +76,11 @@ The work is tracked as epics and task issues on the [GitHub Project board](https
 
 ## Architecture decisions
 
-These are recorded in [`docs/adr/`](docs/adr/).
+These are recorded as ADRs. The index is in [`docs/adr/README.md`](docs/adr/README.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, branch and commit conventions, the PR checklist, and when to write an ADR.
 
 ## License
 
