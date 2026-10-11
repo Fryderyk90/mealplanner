@@ -1,0 +1,23 @@
+name: Chore
+description: Tooling, config, dependencies, CI, docs, refactoring
+title: 'chore: '
+labels: ['type:chore']
+projects: ['Fryderyk90/3']
+
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What and Why
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: |
+        - [ ] 
+        - [ ]
+    validations:
+      required: true

@@ -1,0 +1,48 @@
+name: Feature
+description: A new capability or a user-facing change
+title: 'feat: '
+labels: ['type:feature']
+projects: ['Fryderyk90/3']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the feature so someone could pick it up without asking questions.
+        Remember to add an `area:*` label and a milestone after creating the issue.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why is this needed? What problem does it solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements
+      description: What must be built? Use a bullet list.
+      placeholder: |
+        - ...
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How do we know it's done? Use checkboxes.
+      value: |
+        - [ ] 
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Hints, links, open questions (optional).
