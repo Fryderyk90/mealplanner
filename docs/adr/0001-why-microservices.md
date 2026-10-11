@@ -6,6 +6,7 @@
 ## Context
 
 Meal Planner is a learning project. Its goal is to practise the design, delivery and operation of a modern distributed system:
+
 - service boundaries and data ownership
 - federated GraphQL
 - asynchronous messaging
@@ -19,15 +20,16 @@ Judged on product needs alone (a handful of users, one developer, three small su
 
 We split the system into **three services along bounded-context lines**, plus a BFF and a federation gateway. Each service owns its own database.
 
-| Service | Bounded context | Owns |
-|---|---|---|
-| Recipes | Recipe catalogue | Recipes, ingredients, tags |
-| Planner | Meal planning | Week plans, a snapshot of recipe ingredients |
-| Shopping | Shopping | Shopping lists, items, checked state |
+| Service  | Bounded context  | Owns                                         |
+| -------- | ---------------- | -------------------------------------------- |
+| Recipes  | Recipe catalogue | Recipes, ingredients, tags                   |
+| Planner  | Meal planning    | Week plans, a snapshot of recipe ingredients |
+| Shopping | Shopping         | Shopping lists, items, checked state         |
 
 The frontend is split the same way into microfrontends, one per service, plus a shell.
 
 Rules that follow from this:
+
 1. **No shared database.** A service never reads another service's tables.
 2. **Integration through events** (RabbitMQ) for state changes, and through **GraphQL federation** for read-time composition.
 3. **Shared code is limited** to integration event contracts (`Contracts/`). Entities are never shared.
@@ -36,10 +38,12 @@ Rules that follow from this:
 ## Consequences
 
 **Positive (the learning goals)**
+
 - There are real reasons to practise eventual consistency, the outbox pattern, idempotency, federation, distributed tracing, and deployments per service.
 - The structure mirrors how larger organisations split work across teams.
 
 **Negative (accepted on purpose)**
+
 - More moving parts: 3 databases, a broker, a gateway, a BFF and an identity provider.
 - Debugging needs distributed tracing from day one.
 - Changes that span services need contract versioning.

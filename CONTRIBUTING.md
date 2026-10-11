@@ -4,17 +4,34 @@ This is a learning project, but it follows the practices of a professional team.
 
 ## Prerequisites
 
-| Tool | Version | Needed from |
-|---|---|---|
-| [.NET SDK](https://dotnet.microsoft.com/download) | 10.0.x (pinned in [`global.json`](global.json)) | M0 |
-| Git | any recent version | M0 |
-| [GitHub CLI](https://cli.github.com/) (`gh`) | recent 2.x | M0 |
-| IDE | **Visual Studio 2026**, VS Code + C# Dev Kit, or Rider | M0 |
-| Node.js + pnpm | Node 22+ | M0 (git hooks), M1 (web) |
-| Docker Desktop | recent, WSL 2 backend on Windows | M1 |
-| kind, kubectl, Helm, OpenTofu | recent | M12+ |
+| Tool                                              | Version                                                | Needed from              |
+| ------------------------------------------------- | ------------------------------------------------------ | ------------------------ |
+| [.NET SDK](https://dotnet.microsoft.com/download) | 10.0.x (pinned in [`global.json`](global.json))        | M0                       |
+| Git                                               | any recent version                                     | M0                       |
+| [GitHub CLI](https://cli.github.com/) (`gh`)      | recent 2.x                                             | M0                       |
+| IDE                                               | **Visual Studio 2026**, VS Code + C# Dev Kit, or Rider | M0                       |
+| Node.js + pnpm                                    | Node 22+                                               | M0 (git hooks), M1 (web) |
+| Docker Desktop                                    | recent, WSL 2 backend on Windows                       | M1                       |
+| kind, kubectl, Helm, OpenTofu                     | recent                                                 | M12+                     |
 
-> ⚠️ **Use Visual Studio 2026, not 2022.** The solution uses the `.slnx` format and targets .NET 10. Older Visual Studio versions can't open it, and they ignore the SDK pinned in `global.json`. If double-clicking `MealPlanner.slnx` opens the wrong version, use *Open with → Visual Studio 2026* and tick "Always use this app".
+> ⚠️ **Use Visual Studio 2026, not 2022.** The solution uses the `.slnx` format and targets .NET 10. Older Visual Studio versions can't open it, and they ignore the SDK pinned in `global.json`. If double-clicking `MealPlanner.slnx` opens the wrong version, use _Open with → Visual Studio 2026_ and tick "Always use this app".
+
+### First-time setup
+
+After cloning, run this once:
+
+```bash
+pnpm install
+```
+
+It installs the dev tooling (Prettier, commitlint) and the **git hooks** (through the `prepare` script, which runs `lefthook install`):
+
+| Hook         | What it does                                                                                                          |
+| ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `pre-commit` | Runs `dotnet format` on staged `.cs` files and Prettier on staged web/config/Markdown files, then re-stages the fixes |
+| `commit-msg` | Rejects messages that don't follow [Conventional Commits](#commit-messages) or use an unknown scope                   |
+
+The hooks are defined in [`lefthook.yml`](lefthook.yml). In an emergency you can skip them with `LEFTHOOK=0 git commit …`, but CI runs the same formatting checks (from #9), and the ruleset checks PR titles (from #6).
 
 ## Workflow
 
@@ -31,12 +48,12 @@ Every change goes through the same loop:
 
 ### Board statuses
 
-| Status | Meaning |
-|---|---|
-| Todo | Not started |
+| Status      | Meaning                             |
+| ----------- | ----------------------------------- |
+| Todo        | Not started                         |
 | In Progress | A branch exists and work is ongoing |
-| In Review | A PR is open |
-| Done | Merged, and the issue is closed |
+| In Review   | A PR is open                        |
+| Done        | Merged, and the issue is closed     |
 
 ## Branch naming
 
@@ -62,22 +79,23 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 **Types**
 
-| Type | Use for |
-|---|---|
-| `feat` | A new feature |
-| `fix` | A bug fix |
-| `docs` | Documentation only (including ADRs) |
-| `test` | Adding or fixing tests |
+| Type       | Use for                                                   |
+| ---------- | --------------------------------------------------------- |
+| `feat`     | A new feature                                             |
+| `fix`      | A bug fix                                                 |
+| `docs`     | Documentation only (including ADRs)                       |
+| `test`     | Adding or fixing tests                                    |
 | `refactor` | A code change that neither fixes a bug nor adds a feature |
-| `perf` | A performance improvement |
-| `build` | The build system or dependencies (MSBuild, NuGet, pnpm) |
-| `ci` | GitHub Actions workflows |
-| `chore` | Other maintenance (tooling, config) |
-| `revert` | Reverting an earlier commit |
+| `perf`     | A performance improvement                                 |
+| `build`    | The build system or dependencies (MSBuild, NuGet, pnpm)   |
+| `ci`       | GitHub Actions workflows                                  |
+| `chore`    | Other maintenance (tooling, config)                       |
+| `revert`   | Reverting an earlier commit                               |
 
 **Scopes** (optional, but recommended): `recipes`, `planner`, `shopping`, `gateway`, `bff`, `web`, `ui`, `infra`, `k8s`, `ci`, `deps`, `docs`.
 
 Examples:
+
 ```
 feat(recipes): add tag filtering to the recipes query
 fix(shopping): merge quantities with different units correctly
@@ -85,6 +103,7 @@ docs: add ADR for caching strategy
 ```
 
 **Why this matters**
+
 - PRs are **squash-merged**, so the **PR title becomes the commit message on `main`**. The PR title must follow this format too.
 - From M13 on, [release-please](https://github.com/googleapis/release-please) reads these messages to bump versions and write changelogs: `fix` → patch, `feat` → minor, and `!` or `BREAKING CHANGE:` → major.
 - Issue #4 adds commitlint through a git hook, so badly formatted messages are rejected locally.
