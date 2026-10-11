@@ -1,0 +1,10 @@
+name: Vulnerable demo
+on: pull_request
+permissions:
+  contents: read
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      # ❌ BAD: the PR title (attacker-controlled) is inserted directly into the shell script
+      - run: echo "PR title is ${{ github.event.pull_request.title }}"
