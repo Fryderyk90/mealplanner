@@ -1,0 +1,19 @@
+# Default owner for everything
+*                     @Fryderyk90
+
+# Backend services
+/src/Services/Recipes/   @Fryderyk90
+/src/Services/Planner/   @Fryderyk90
+/src/Services/Shopping/  @Fryderyk90
+
+# Edge: BFF and gateway
+/src/Bff/              @Fryderyk90
+/src/Gateway/          @Fryderyk90
+
+# Frontend
+/web/                  @Fryderyk90
+
+# Platform and delivery
+/deploy/               @Fryderyk90
+/infra/                @Fryderyk90
+/.github/              @Fryderyk90
