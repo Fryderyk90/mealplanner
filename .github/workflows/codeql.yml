@@ -1,0 +1,63 @@
+name: CodeQL
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  # Weekly scan even without code changes: GitHub keeps adding new queries,
+  # so unchanged code can get new findings. Runs Mondays 04:27 UTC.
+  # (Odd minutes avoid the load spike at :00, when everyone's cron jobs run.)
+  schedule:
+    - cron: '27 4 * * 1'
+
+# Default for all jobs: read-only
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    # The matrix value goes into the name, e.g. "analyze (actions)"
+    name: analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # This job needs ONE extra permission: uploading results to the Security tab
+    permissions:
+      contents: read
+      security-events: write
+
+    strategy:
+      # Don't cancel the other languages if one fails
+      fail-fast: false
+      # MATRIX: this job runs once per entry, in parallel
+      matrix:
+        include:
+          - language: actions
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          # Enable in M1 (#25) when the first .cs file exists.
+          # CodeQL fails on languages without source files.
+          # - language: csharp
+          #   build-mode: none
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # Phase 1: set up CodeQL and build the code database.
+      # build-mode none = analyse source directly without compiling (works for C# too)
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          # The default suite plus more security queries (more findings, a few more false positives)
+          queries: security-extended
+
+      # Phase 2: run the queries and upload results to Security → Code scanning
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:${{ matrix.language }}
