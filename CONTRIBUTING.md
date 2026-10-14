@@ -145,6 +145,17 @@ Not needed for: bug fixes, refactors inside one component, or library upgrades w
 
 Copy [`docs/adr/template.md`](docs/adr/template.md) to get started.
 
+## Troubleshooting
+
+| Symptom                                                              | Fix                                                                                                                                      |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| The solution won't open, or there are errors about `.slnx` / .NET 10 | You opened it in Visual Studio 2022. Use **Visual Studio 2026**.                                                                         |
+| `ERR_PNPM_IGNORED_BUILDS` during `pnpm install` / `pnpm add`         | pnpm blocks dependency install scripts by default. Add the package under `allowBuilds:` in `pnpm-workspace.yaml` with `true` or `false`. |
+| Git hooks don't run after cloning                                    | Run `pnpm install`. If it says "Already up to date", run `pnpm run prepare`.                                                             |
+| A commit is rejected by commitlint                                   | Use `type(scope): description` with an allowed type and scope (see [Commit messages](#commit-messages)).                                 |
+| An issue form is missing from "New issue"                            | Its YAML is invalid. Open the file on GitHub to see the error. Templates are only read from `main`.                                      |
+| VS shows "Miscellaneous Files … cannot be opened" for a deleted file | Stale IDE state. Close VS and delete the `.vs/` folder.                                                                                  |
+
 ## Security
 
 Never commit secrets. Use git-ignored `.env` files locally, and Sealed Secrets in Kubernetes. If you find a vulnerability, don't open a public issue. A `SECURITY.md` with private vulnerability reporting is set up in M9.
